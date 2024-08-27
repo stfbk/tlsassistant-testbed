@@ -17,3 +17,5 @@ cd nginx-1.9.0
 ./configure --with-http_ssl_module --with-openssl=$openssldir/openssl-1.0.2u --with-openssl-opt='enable-weak-ssl-ciphers enable-rc4' --with-http_gzip_static_module --prefix=/usr/local/nginx --with-cc-opt="-Wno-error"
 make
 sudo make install
+
+echo "alias nginx=\"sudo /usr/local/nginx/sbin/nginx\"" | tee -a ~/.bashrc
