@@ -19,6 +19,7 @@ echo -e "${GREEN}[+][+][+][+] CONFIGURING NGINX [+][+][+][+]${NC}"
 ./configure --with-http_ssl_module --with-openssl=$openssldir/openssl-1.0.2u --with-openssl-opt='enable-weak-ssl-ciphers enable-rc4' --with-http_gzip_static_module --prefix=/usr/local/nginx --with-cc-opt="-Wno-error"
 make
 sudo make install
+cd ..
 
 echo -e "${GREEN}[+][+][+][+] CREATING AN ALIAS [+][+][+][+]${NC}"
 echo "alias nginx=\"sudo /usr/local/nginx/sbin/nginx\"" | tee -a ~/.bashrc
@@ -26,3 +27,5 @@ echo "alias nginx=\"sudo /usr/local/nginx/sbin/nginx\"" | tee -a ~/.bashrc
 echo -e "${GREEN}[+][+][+][+] GENERATING THE CERTIFICATE [+][+][+][+]${NC}"
 sudo openssl req -x509 -nodes -newkey rsa:4096 -keyout /usr/local/nginx/conf/cert.key -out /usr/local/nginx/conf/cert.pem -days 365
 
+echo -e "${GREEN}[+][+][+][+] COPY THE SERVER CONFIGURATION [+][+][+][+]${NC}"
+sudo cp config.conf /usr/local/nginx/conf/nginx.conf
