@@ -24,8 +24,7 @@ sudo make install
 cd ..
 
 echo -e "${GREEN}[+][+][+][+] CREATING AN ALIAS [+][+][+][+]${NC}"
-echo "alias nginx='sudo /usr/local/nginx/sbin/nginx'" | tee -a ~/.bashrc
-source ~/.bashrc
+sudo mv nginx /usr/bin
 
 echo -e "${GREEN}[+][+][+][+] GENERATING THE CERTIFICATE [+][+][+][+]${NC}"
 sudo openssl req -x509 -nodes -newkey rsa:4096 -keyout /usr/local/nginx/conf/cert.key -out /usr/local/nginx/conf/cert.pem -days 365
