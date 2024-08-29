@@ -6,10 +6,10 @@ NC='\033[0m' # No Color
 echo "Start setup of the virtual machine..."
 
 echo -e "${GREEN}[+][+][+][+] DOWNGRADING OPENSSL [+][+][+][+]${NC}"
-wget --no-check-certificate https://www.openssl.org/source/openssl-1.0.1a.tar.gz
+wget --no-check-certificate https://www.openssl.org/source/openssl-1.0.1b.tar.gz
 openssldir=$(pwd)
-tar -zxf openssl-1.0.1a.tar.gz
-rm openssl-1.0.1a.tar.gz
+tar -zxf openssl-1.0.1b.tar.gz
+rm openssl-1.0.1b.tar.gz
 
 echo -e "${GREEN}[+][+][+][+] DOWNLOADING NGINX [+][+][+][+]${NC}"
 sudo apt-get update
@@ -20,7 +20,7 @@ rm nginx-1.9.0.tar.gz
 cd nginx-1.9.0
 
 echo -e "${GREEN}[+][+][+][+] CONFIGURING NGINX [+][+][+][+]${NC}"
-./configure --with-http_ssl_module --with-openssl=$openssldir/openssl-1.0.1a --with-openssl-opt='enable-weak-ssl-ciphers enable-rc4 enable-ssl2' --with-http_gzip_static_module --prefix=/usr/local/nginx --with-cc-opt="-Wno-error"
+./configure --with-http_ssl_module --with-openssl=$openssldir/openssl-1.0.1b --with-openssl-opt='enable-weak-ssl-ciphers enable-rc4 enable-ssl2' --with-http_gzip_static_module --prefix=/usr/local/nginx --with-cc-opt="-Wno-error"
 make
 sudo make install
 cd ..
