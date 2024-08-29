@@ -9,6 +9,13 @@ if [ -z $1 ]; then
     OPENSSL_VERSION=$DEFAULT_OPENSSL_VERSION
 else
     OPENSSL_VERSION_LIST=(
+        "1.0.1"
+        "1.0.1a"
+        "1.0.1b"
+        "1.0.1c"
+        "1.0.1d"
+        "1.0.1e"
+        "1.0.1f"
         "1.0.1g"
         "1.0.1h"
         "1.0.1i"
@@ -24,9 +31,9 @@ else
         "1.0.1s"
         "1.0.1t"
         "1.0.1u"
-    )    
-
-
+    )
+    
+    
     for version in "${OPENSSL_VERSION_LIST[@]}"; do
         if [ "$1" == "$version" ]; then
             OPENSSL_VERSION="$1"
