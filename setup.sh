@@ -28,41 +28,47 @@ OPENSSL_VERSION_LIST=(
     "1.0.1u"
 )
 
+echo "Start setup of the virtual machine..."
+
 DEFAULT_OPENSSL_VERSION="1.0.1u"
+
+echo -e "${GREEN}[+][+][+][+] DOWNGRADING OPENSSL [+][+][+][+]${NC}"
+wget --no-check-certificate https://www.openssl.org/source/openssl-$DEFAULT_OPENSSL_VERSION.tar.gz
+openssldir="$(pwd)"
+tar -zxf openssl-$DEFAULT_OPENSSL_VERSION.tar.gz
+rm openssl-$DEFAULT_OPENSSL_VERSION.tar.gz
+
 if [ -z $1 ]; then
     OPENSSL_VERSION=$DEFAULT_OPENSSL_VERSION
 else
     for version in "${OPENSSL_VERSION_LIST[@]}"; do
         if [ "$1" == "$version" ]; then
             OPENSSL_VERSION="$1"
+            echo -e "${GREEN}[+][+][+][+] DOWNGRADING OPENSSL [+][+][+][+]${NC}"
+            wget --no-check-certificate https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz
+            openssldir="$(pwd)"
+            tar -zxf openssl-$OPENSSL_VERSION.tar.gz
+            rm openssl-$OPENSSL_VERSION.tar.gz
             break
         fi
     done
 fi
 
-echo "Start setup of the virtual machine..."
-
-echo -e "${GREEN}[+][+][+][+] DOWNGRADING OPENSSL [+][+][+][+]${NC}"
-wget --no-check-certificate https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz
-openssldir=$(pwd)
-tar -zxf openssl-$OPENSSL_VERSION.tar.gz
-rm openssl-$OPENSSL_VERSION.tar.gz
+# In older versions of OpenSSL (from 1.0.1 to 1.0.1g) the pod files present some syntax errors.
+# Normally we would run the sudo make install_sw so that the manuals and docs are not built but when
+# configured with Nginx (when configuring it), OpenSSL has no real way of doing it.
+# For this reason we are downloading an older version of OpenSSL (version 1.0.1u) where the files are correct
+# and we are copying the correct file in the doc directory of the older OpenSSL version.
 
 for element in "${OPENSSL_VERSION_LIST[@]}"; do
     if [[ "$element" == "1.0.1h" ]]; then
         break
     fi
-    
     if [[ "$element" == "$OPENSSL_VERSION" ]]; then
         echo -e "${GREEN}[+][+][+][+] FIXING OPENSSL [+][+][+][+]${NC}"
-        source_dir="pod-files"
-        destination_dir="openssl-$OPENSSL_VERSION/doc/ssl"
-        files=("SSL_accept.pod" "SSL_clear.pod" "SSL_COMP_add_compression_method.pod" "SSL_connect.pod" "SSL_CTX_add_session.pod" "SSL_CTX_load_verify_locations.pod" "SSL_CTX_set_client_CA_list.pod" "SSL_CTX_set_session_id_context.pod" "SSL_CTX_set_ssl_version.pod" "SSL_CTX_use_psk_identity_hint.pod" "SSL_do_handshake.pod" "SSL_read.pod" "SSL_session_reused.pod" "SSL_set_fd.pod" "SSL_set_session.pod" "SSL_shutdown.pod" "SSL_write.pod")
-        for file in "${files[@]}"; do
-            cp "${source_dir}/${file}" "${destination_dir}/${file}"
-        done
-        cp "${source_dir}/cms.pod" "openssl-$OPENSSL_VERSION/doc/apps/cms.pod"
-        cp "${source_dir}/smime.pod" "openssl-$OPENSSL_VERSION/doc/apps/smime.pod"
+        cp -rf "openssl-$DEFAULT_OPENSSL_VERSION/doc/crypto" "openssl-$OPENSSL_VERSION/doc"
+        cp -rf "openssl-$DEFAULT_OPENSSL_VERSION/doc/ssl" "openssl-$OPENSSL_VERSION/doc"
+        cp -rf "openssl-$DEFAULT_OPENSSL_VERSION/doc/apps" "openssl-$OPENSSL_VERSION/doc"
     fi
 done
 
