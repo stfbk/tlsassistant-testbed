@@ -57,7 +57,7 @@ for element in "${OPENSSL_VERSION_LIST[@]}"; do
         echo -e "${GREEN}[+][+][+][+] FIXING OPENSSL [+][+][+][+]${NC}"
         source_dir="pod-files"
         destination_dir="openssl-$OPENSSL_VERSION/doc/ssl"
-        files=("SSL_accept.pod" "SSL_clear.pod" "SSL_COMP_add_compression_method.pod" "SSL_connect.pod" "SSL_CTX_add_session.pod" "SSL_CTX_load_verify_location.pod" "SSL_CTX_set_client_CA_list.pod" "SSL_CTX_set_session_id_context.pod" "SSL_CTX_set_ssl_version.pod" "SSL_CTX_use_psk_identity_hint.pod" "SSL_do_handshake.pod" "SSL_read.pod" "SSL_session_reused.pod" "SSL_set_fd.pod" "SSL_set_session.pod" "SSL_shutdown.pod" "SSL_write.pod")
+        files=("SSL_accept.pod" "SSL_clear.pod" "SSL_COMP_add_compression_method.pod" "SSL_connect.pod" "SSL_CTX_add_session.pod" "SSL_CTX_load_verify_locations.pod" "SSL_CTX_set_client_CA_list.pod" "SSL_CTX_set_session_id_context.pod" "SSL_CTX_set_ssl_version.pod" "SSL_CTX_use_psk_identity_hint.pod" "SSL_do_handshake.pod" "SSL_read.pod" "SSL_session_reused.pod" "SSL_set_fd.pod" "SSL_set_session.pod" "SSL_shutdown.pod" "SSL_write.pod")
         for file in "${files[@]}"; do
             cp "${source_dir}/${file}" "${destination_dir}/${file}"
         done
