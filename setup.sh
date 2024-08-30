@@ -90,6 +90,9 @@ make
 sudo make install
 cd ..
 
+echo -e "${GREEN}[+][+][+][+] ADDING PHP SCRIPT TO NGINX [+][+][+][+]${NC}"
+sudo cp -f scripts/reflection.php /usr/local/nginx/html
+
 echo -e "${GREEN}[+][+][+][+] CREATING AN ALIAS [+][+][+][+]${NC}"
 sudo mv nginx /usr/bin
 
