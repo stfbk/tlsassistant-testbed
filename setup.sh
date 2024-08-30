@@ -85,7 +85,7 @@ rm nginx-1.9.0.tar.gz
 cd nginx-1.9.0
 
 echo -e "${GREEN}[+][+][+][+] CONFIGURING NGINX [+][+][+][+]${NC}"
-./configure --with-http_ssl_module --with-http_fastcgi_module --with-openssl=$openssldir/openssl-$OPENSSL_VERSION --with-openssl-opt='enable-weak-ssl-ciphers enable-rc4 enable-ssl2' --with-http_gzip_static_module --prefix=/usr/local/nginx --with-cc-opt="-Wno-error"
+./configure --with-http_ssl_module --with-openssl=$openssldir/openssl-$OPENSSL_VERSION --with-openssl-opt='enable-weak-ssl-ciphers enable-rc4 enable-ssl2' --with-http_gzip_static_module --prefix=/usr/local/nginx --with-cc-opt="-Wno-error"
 make
 sudo make install
 cd ..
