@@ -30,6 +30,10 @@ OPENSSL_VERSION_LIST=(
 
 echo "Start setup of the virtual machine..."
 
+
+echo -e "${GREEN}[+][+][+][+] INSTALLING PHP [+][+][+][+]${NC}"
+sudo apt-get install php-fpm
+
 DEFAULT_OPENSSL_VERSION="1.0.1u"
 
 echo -e "${GREEN}[+][+][+][+] DOWNGRADING OPENSSL [+][+][+][+]${NC}"
