@@ -52,7 +52,7 @@ echo "Start setup of the virtual machine..."
 
 
 echo -e "${GREEN}[+][+][+][+] INSTALLING PHP [+][+][+][+]${NC}"
-sudo apt-get install php-fpm
+yes | sudo apt-get install php-fpm
 
 DEFAULT_OPENSSL_VERSION="1.0.1u"
 
@@ -102,7 +102,7 @@ fi
 
 echo -e "${GREEN}[+][+][+][+] DOWNLOADING NGINX [+][+][+][+]${NC}"
 sudo apt-get update
-sudo apt-get install build-essential libpcre3 libpcre3-dev zlib1g zlib1g-dev libssl-dev libgd-dev libxml2 libxml2-dev uuid-dev
+yes | sudo apt-get install build-essential libpcre3 libpcre3-dev zlib1g zlib1g-dev libssl-dev libgd-dev libxml2 libxml2-dev uuid-dev
 wget http://nginx.org/download/nginx-1.9.0.tar.gz
 tar -zxvf nginx-1.9.0.tar.gz
 rm nginx-1.9.0.tar.gz
@@ -119,7 +119,12 @@ fi
 cd ..
 
 echo -e "${GREEN}[+][+][+][+] ADDING PHP SCRIPT TO NGINX [+][+][+][+]${NC}"
-sudo cp -f scripts/reflection.php /usr/local/nginx/html
+sudo cp -f scripts/reflection.php /usr/local/nginx-$DEFAULT_OPENSSL_VERSION/html
+
+if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
+    echo -e "${GREEN}[+][+][+][+] ADDING PHP SCRIPT TO NGINX [+][+][+][+]${NC}"
+    sudo cp -f scripts/reflection.php /usr/local/nginx-$OPENSSL_VERSION/html
+fi
 
 echo -e "${GREEN}[+][+][+][+] CREATING AN ALIAS FOR $DEFAULT_OPENSSL_VERSION [+][+][+][+]${NC}"
 creating_alias $DEFAULT_OPENSSL_VERSION
@@ -130,7 +135,19 @@ if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
 fi
 
 echo -e "${GREEN}[+][+][+][+] GENERATING THE CERTIFICATE [+][+][+][+]${NC}"
-sudo openssl req -x509 -nodes -subj "/CN=fbk.eu" -newkey rsa:4096 -keyout /usr/local/nginx/conf/cert.key -out /usr/local/nginx/conf/cert.pem -days 365
+sudo openssl req -x509 -nodes -subj "/CN=fbk.eu" -newkey rsa:4096 -keyout /usr/local/nginx-$DEFAULT_OPENSSL_VERSION/conf/cert.key -out /usr/local/nginx-$DEFAULT_OPENSSL_VERSION/conf/cert.pem -days 365
+
+if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
+    echo -e "${GREEN}[+][+][+][+] GENERATING THE CERTIFICATE [+][+][+][+]${NC}"
+    sudo openssl req -x509 -nodes -subj "/CN=fbk.eu" -newkey rsa:4096 -keyout /usr/local/nginx-$OPENSSL_VERSION/conf/cert.key -out /usr/local/nginx-$OPENSSL_VERSION/conf/cert.pem -days 365
+fi
 
 echo -e "${GREEN}[+][+][+][+] COPY THE SERVER CONFIGURATION [+][+][+][+]${NC}"
-sudo cp config.conf /usr/local/nginx/conf/nginx.conf
+sudo cp config.conf /usr/local/nginx-$DEFAULT_OPENSSL_VERSION/conf/nginx.conf
+
+if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
+    echo -e "${GREEN}[+][+][+][+] COPY THE SERVER CONFIGURATION [+][+][+][+]${NC}"
+    sudo cp config.conf /usr/local/nginx-$OPENSSL_VERSION/conf/nginx.conf
+fi
+
+echo -e "${GREEN}[+][+][+][+] THE CONFIGURATION IS DONE [+][+][+][+]${NC}"
