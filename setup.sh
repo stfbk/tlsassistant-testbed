@@ -3,6 +3,26 @@
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 
+download_openssl () {
+    echo -e "${GREEN}[+][+][+][+] INSTALLING OPENSSL [+][+][+][+]${NC}"
+    wget --no-check-certificate https://www.openssl.org/source/openssl-$1.tar.gz
+    tar -zxf openssl-$1.tar.gz
+    rm openssl-$1.tar.gz
+}
+
+configuring_nginx () {
+    ./configure --with-http_ssl_module --with-openssl="$1/openssl-$2" --with-openssl-opt='enable-weak-ssl-ciphers enable-rc4 enable-ssl2' --with-http_gzip_static_module --prefix=/usr/local/nginx_$2 --with-cc-opt="-Wno-error"
+    sudo make
+    sudo make install
+}
+
+creating_alias () {
+    echo -e "#!/bin/bash\nsudo /usr/local/nginx_$1/sbin/nginx" > nginx_$1
+    chmod 777 nginx_$1
+    sudo mv nginx_$1 /usr/bin
+}
+
+
 OPENSSL_VERSION_LIST=(
     "1.0.1"
     "1.0.1a"
