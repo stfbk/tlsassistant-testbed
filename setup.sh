@@ -121,8 +121,13 @@ cd ..
 echo -e "${GREEN}[+][+][+][+] ADDING PHP SCRIPT TO NGINX [+][+][+][+]${NC}"
 sudo cp -f scripts/reflection.php /usr/local/nginx/html
 
-echo -e "${GREEN}[+][+][+][+] CREATING AN ALIAS [+][+][+][+]${NC}"
-sudo mv nginx /usr/bin
+echo -e "${GREEN}[+][+][+][+] CREATING AN ALIAS FOR $DEFAULT_OPENSSL_VERSION [+][+][+][+]${NC}"
+creating_alias $DEFAULT_OPENSSL_VERSION
+
+if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
+    echo -e "${GREEN}[+][+][+][+] CREATING AN ALIAS FOR $OPENSSL_VERSION [+][+][+][+]${NC}"
+    creating_alias $OPENSSL_VERSION
+fi
 
 echo -e "${GREEN}[+][+][+][+] GENERATING THE CERTIFICATE [+][+][+][+]${NC}"
 sudo openssl req -x509 -nodes -subj "/CN=fbk.eu" -newkey rsa:4096 -keyout /usr/local/nginx/conf/cert.key -out /usr/local/nginx/conf/cert.pem -days 365
