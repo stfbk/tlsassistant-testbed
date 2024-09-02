@@ -62,21 +62,22 @@ openssldir="$(pwd)"
 tar -zxf openssl-$DEFAULT_OPENSSL_VERSION.tar.gz
 rm openssl-$DEFAULT_OPENSSL_VERSION.tar.gz
 
-if [ -z $1 ]; then
+if [ -z "$1" ]; then
     OPENSSL_VERSION=$DEFAULT_OPENSSL_VERSION
 else
     for version in "${OPENSSL_VERSION_LIST[@]}"; do
         if [ "$1" == "$version" ]; then
             OPENSSL_VERSION="$1"
-            echo -e "${GREEN}[+][+][+][+] DOWNGRADING OPENSSL [+][+][+][+]${NC}"
-            wget --no-check-certificate https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz
-            openssldir="$(pwd)"
-            tar -zxf openssl-$OPENSSL_VERSION.tar.gz
-            rm openssl-$OPENSSL_VERSION.tar.gz
             break
         fi
     done
 fi
+
+openssldir_v_u=$(pwd)
+openssldir_v_user=""
+
+echo -e "${GREEN}[+][+][+][+] DOWNLOADING OPENSSL $DEFAULT_OPENSSL_VERSION [+][+][+][+]${NC}"
+download_openssl $DEFAULT_OPENSSL_VERSION
 
 # In older versions of OpenSSL (from 1.0.1 to 1.0.1g) the pod files present some syntax errors.
 # Normally we would run the sudo make install_sw so that the manuals and docs are not built but when
@@ -84,17 +85,20 @@ fi
 # For this reason we are downloading a newer version of OpenSSL (version 1.0.1u) where the files are correct
 # and we are copying the correct files in the doc directory of the older OpenSSL version.
 
-for element in "${OPENSSL_VERSION_LIST[@]}"; do
-    if [[ "$element" == "1.0.1h" ]]; then
-        break
-    fi
-    if [[ "$element" == "$OPENSSL_VERSION" ]]; then
-        echo -e "${GREEN}[+][+][+][+] FIXING OPENSSL [+][+][+][+]${NC}"
-        cp -rf "openssl-$DEFAULT_OPENSSL_VERSION/doc/crypto" "openssl-$OPENSSL_VERSION/doc"
-        cp -rf "openssl-$DEFAULT_OPENSSL_VERSION/doc/ssl" "openssl-$OPENSSL_VERSION/doc"
-        cp -rf "openssl-$DEFAULT_OPENSSL_VERSION/doc/apps" "openssl-$OPENSSL_VERSION/doc"
-    fi
-done
+if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
+    for element in "${OPENSSL_VERSION_LIST[@]}"; do
+        if [ "$element" == "$OPENSSL_VERSION" ]; then
+            echo -e "${GREEN}[+][+][+][+] DOWNGRADING OPENSSL $OPENSSL_VERSION [+][+][+][+]${NC}"
+            openssldir_v_user=$(pwd)
+            download_openssl $OPENSSL_VERSION
+            echo -e "${GREEN}[+][+][+][+] FIXING OPENSSL [+][+][+][+]${NC}"
+            cp -rf "openssl-$DEFAULT_OPENSSL_VERSION/doc/crypto" "openssl-$OPENSSL_VERSION/doc"
+            cp -rf "openssl-$DEFAULT_OPENSSL_VERSION/doc/ssl" "openssl-$OPENSSL_VERSION/doc"
+            cp -rf "openssl-$DEFAULT_OPENSSL_VERSION/doc/apps" "openssl-$OPENSSL_VERSION/doc"
+            break
+        fi
+    done
+fi
 
 echo -e "${GREEN}[+][+][+][+] DOWNLOADING NGINX [+][+][+][+]${NC}"
 sudo apt-get update
