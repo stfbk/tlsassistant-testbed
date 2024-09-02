@@ -61,8 +61,8 @@ fi
 # In older versions of OpenSSL (from 1.0.1 to 1.0.1g) the pod files present some syntax errors.
 # Normally we would run the sudo make install_sw so that the manuals and docs are not built but when
 # configured with Nginx (when configuring it), OpenSSL has no real way of doing it.
-# For this reason we are downloading an older version of OpenSSL (version 1.0.1u) where the files are correct
-# and we are copying the correct file in the doc directory of the older OpenSSL version.
+# For this reason we are downloading a newer version of OpenSSL (version 1.0.1u) where the files are correct
+# and we are copying the correct files in the doc directory of the older OpenSSL version.
 
 for element in "${OPENSSL_VERSION_LIST[@]}"; do
     if [[ "$element" == "1.0.1h" ]]; then
