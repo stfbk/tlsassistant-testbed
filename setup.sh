@@ -108,10 +108,14 @@ tar -zxvf nginx-1.9.0.tar.gz
 rm nginx-1.9.0.tar.gz
 cd nginx-1.9.0
 
-echo -e "${GREEN}[+][+][+][+] CONFIGURING NGINX [+][+][+][+]${NC}"
-./configure --with-http_ssl_module --with-openssl=$openssldir/openssl-$OPENSSL_VERSION --with-openssl-opt='enable-weak-ssl-ciphers enable-rc4 enable-ssl2' --with-http_gzip_static_module --prefix=/usr/local/nginx --with-cc-opt="-Wno-error"
-make
-sudo make install
+echo -e "${GREEN}[+][+][+][+] CONFIGURING NGINX $DEFAULT_OPENSSL_VERSION [+][+][+][+]${NC}"
+configuring_nginx $openssldir_v_u $DEFAULT_OPENSSL_VERSION
+
+if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
+    echo -e "${GREEN}[+][+][+][+] CONFIGURING NGINX $OPENSSL_VERSION [+][+][+][+]${NC}"
+    configuring_nginx $openssldir_v_user $OPENSSL_VERSION
+fi
+
 cd ..
 
 echo -e "${GREEN}[+][+][+][+] ADDING PHP SCRIPT TO NGINX [+][+][+][+]${NC}"
