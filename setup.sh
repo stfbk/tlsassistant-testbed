@@ -4,6 +4,7 @@ GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 
 download_openssl () {
+    echo -e "${GREEN}[+][+][+][+] DOWNLOADING OPENSSL VERSION $1 [+][+][+][+]${NC}"
     wget --no-check-certificate https://www.openssl.org/source/openssl-$1.tar.gz
     tar -zxf openssl-$1.tar.gz
     rm openssl-$1.tar.gz
@@ -20,7 +21,6 @@ creating_alias () {
     chmod 777 nginx-$1
     sudo mv nginx-$1 /usr/bin
 }
-
 
 OPENSSL_VERSION_LIST=(
     "1.0.1"
@@ -55,12 +55,6 @@ yes | sudo apt-get install php-fpm
 
 DEFAULT_OPENSSL_VERSION="1.0.1u"
 
-echo -e "${GREEN}[+][+][+][+] DOWNGRADING OPENSSL [+][+][+][+]${NC}"
-wget --no-check-certificate https://www.openssl.org/source/openssl-$DEFAULT_OPENSSL_VERSION.tar.gz
-openssldir="$(pwd)"
-tar -zxf openssl-$DEFAULT_OPENSSL_VERSION.tar.gz
-rm openssl-$DEFAULT_OPENSSL_VERSION.tar.gz
-
 if [ -z "$1" ]; then
     OPENSSL_VERSION=$DEFAULT_OPENSSL_VERSION
 else
@@ -75,8 +69,8 @@ fi
 openssldir_v_u=$(pwd)
 openssldir_v_user=""
 
-echo -e "${GREEN}[+][+][+][+] DOWNLOADING OPENSSL $DEFAULT_OPENSSL_VERSION [+][+][+][+]${NC}"
 download_openssl $DEFAULT_OPENSSL_VERSION
+openssldir="$(pwd)"
 
 # In older versions of OpenSSL (from 1.0.1 to 1.0.1g) the pod files present some syntax errors.
 # Normally we would run the sudo make install_sw so that the manuals and docs are not built but when
@@ -87,9 +81,15 @@ download_openssl $DEFAULT_OPENSSL_VERSION
 if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
     for element in "${OPENSSL_VERSION_LIST[@]}"; do
         if [ "$element" == "$OPENSSL_VERSION" ]; then
-            echo -e "${GREEN}[+][+][+][+] DOWNGRADING OPENSSL $OPENSSL_VERSION [+][+][+][+]${NC}"
+            if [[ "$element" == "1.0.1h"]]; then
+                openssldir_v_user=$(pwd)
+                download_openssl $OPENSSL_VERSION
+                break
+            fi
+            
             openssldir_v_user=$(pwd)
             download_openssl $OPENSSL_VERSION
+            
             echo -e "${GREEN}[+][+][+][+] FIXING OPENSSL [+][+][+][+]${NC}"
             cp -rf "openssl-$DEFAULT_OPENSSL_VERSION/doc/crypto" "openssl-$OPENSSL_VERSION/doc"
             cp -rf "openssl-$DEFAULT_OPENSSL_VERSION/doc/ssl" "openssl-$OPENSSL_VERSION/doc"
