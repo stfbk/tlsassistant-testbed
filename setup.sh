@@ -34,6 +34,12 @@ generate_certificate () {
     sudo openssl req -x509 -nodes -subj "/CN=fbk.eu" -newkey rsa:4096 -keyout /usr/local/nginx-$1/conf/cert.key -out /usr/local/nginx-$1/conf/cert.pem -days 365
 }
 
+copy_configuration () {
+    echo -e "${GREEN}[+][+][+][+] COPYING THE SERVER CONFIGURATION [+][+][+][+]${NC}"
+    sudo cp config.conf /usr/local/nginx-$1/conf/nginx.conf
+    
+}
+
 OPENSSL_VERSION_LIST=(
     "1.0.1"
     "1.0.1a"
@@ -159,12 +165,12 @@ if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
     generate_certificate $OPENSSL_VERSION
 fi
 
-echo -e "${GREEN}[+][+][+][+] COPY THE SERVER CONFIGURATION [+][+][+][+]${NC}"
-sudo cp config.conf /usr/local/nginx-$DEFAULT_OPENSSL_VERSION/conf/nginx.conf
+#! COPY THE CONFIGURATION TO NGINX
+
+copy_configuration $DEFAULT_OPENSSL_VERSION
 
 if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
-    echo -e "${GREEN}[+][+][+][+] COPY THE SERVER CONFIGURATION [+][+][+][+]${NC}"
-    sudo cp config.conf /usr/local/nginx-$OPENSSL_VERSION/conf/nginx.conf
+    copy_configuration $OPENSSL_VERSION
 fi
 
 echo -e "${GREEN}[+][+][+][+] THE CONFIGURATION IS DONE [+][+][+][+]${NC}"
