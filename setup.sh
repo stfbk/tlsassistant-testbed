@@ -17,6 +17,11 @@ configuring_nginx () {
     sudo make install
 }
 
+add_php_script () {
+    echo -e "${GREEN}[+][+][+][+] ADDING PHP SCRIPT TO NGINX [+][+][+][+]${NC}"
+    sudo cp -f scripts/reflection.php /usr/local/nginx-$1/html
+}
+
 creating_alias () {
     echo -e "#!/bin/bash\nsudo /usr/local/nginx-$1/sbin/nginx" > nginx-$1
     chmod 777 nginx-$1
@@ -86,7 +91,7 @@ download_openssl $DEFAULT_OPENSSL_VERSION
 if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
     for element in "${OPENSSL_VERSION_LIST[@]}"; do
         if [ "$element" == "$OPENSSL_VERSION" ]; then
-            if [[ "$element" == "1.0.1h"]]; then
+            if [[ "$element" == "1.0.1h" ]]; then
                 openssldir_v_user=$(pwd)
                 download_openssl $OPENSSL_VERSION
                 break
@@ -124,12 +129,12 @@ fi
 
 cd ..
 
-echo -e "${GREEN}[+][+][+][+] ADDING PHP SCRIPT TO NGINX [+][+][+][+]${NC}"
-sudo cp -f scripts/reflection.php /usr/local/nginx-$DEFAULT_OPENSSL_VERSION/html
+#! ADDING PHP SCRIPT TO NGINX CONFIGURATION
+
+add_php_script $DEFAULT_OPENSSL_VERSION
 
 if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
-    echo -e "${GREEN}[+][+][+][+] ADDING PHP SCRIPT TO NGINX [+][+][+][+]${NC}"
-    sudo cp -f scripts/reflection.php /usr/local/nginx-$OPENSSL_VERSION/html
+    add_php_script $OPENSSL_VERSION
 fi
 
 echo -e "${GREEN}[+][+][+][+] CREATING AN ALIAS FOR $DEFAULT_OPENSSL_VERSION [+][+][+][+]${NC}"
