@@ -11,6 +11,7 @@ download_openssl () {
 }
 
 configuring_nginx () {
+    echo -e "${GREEN}[+][+][+][+] CONFIGURING NGINX WITH OPENSSL VERSION $2 [+][+][+][+]${NC}"
     ./configure --with-http_ssl_module --with-http_spdy_module --with-openssl="$1/openssl-$2" --with-openssl-opt='enable-weak-ssl-ciphers enable-rc4 enable-ssl2' --with-http_gzip_static_module --prefix=/usr/local/nginx-$2 --with-cc-opt="-Wno-error"
     sudo make
     sudo make install
@@ -49,9 +50,12 @@ OPENSSL_VERSION_LIST=(
 
 echo "Start setup of the virtual machine..."
 
+#! INSTALLING PHP
 
 echo -e "${GREEN}[+][+][+][+] INSTALLING PHP [+][+][+][+]${NC}"
 yes | sudo apt-get install php-fpm
+
+#! SETTING UP THE DEFAULT OPENSSL VERSION
 
 DEFAULT_OPENSSL_VERSION="1.0.1u"
 
@@ -66,11 +70,12 @@ else
     done
 fi
 
-openssldir_v_u=$(pwd)
+openssldir_v_u=$(pwd)A
 openssldir_v_user=""
 
+#! DOWNLOADING OPENSSL
+
 download_openssl $DEFAULT_OPENSSL_VERSION
-openssldir="$(pwd)"
 
 # In older versions of OpenSSL (from 1.0.1 to 1.0.1g) the pod files present some syntax errors.
 # Normally we would run the sudo make install_sw so that the manuals and docs are not built but when
@@ -99,6 +104,8 @@ if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
     done
 fi
 
+#! DOWNLOADING NGINX (only one version at the time for the moment)
+
 echo -e "${GREEN}[+][+][+][+] DOWNLOADING NGINX [+][+][+][+]${NC}"
 sudo apt-get update
 yes | sudo apt-get install build-essential libpcre3 libpcre3-dev zlib1g zlib1g-dev libssl-dev libgd-dev libxml2 libxml2-dev uuid-dev
@@ -107,11 +114,11 @@ tar -zxvf nginx-1.9.0.tar.gz
 rm nginx-1.9.0.tar.gz
 cd nginx-1.9.0
 
-echo -e "${GREEN}[+][+][+][+] CONFIGURING NGINX $DEFAULT_OPENSSL_VERSION [+][+][+][+]${NC}"
+#! CONFIGURING NGINX
+
 configuring_nginx $openssldir_v_u $DEFAULT_OPENSSL_VERSION
 
 if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
-    echo -e "${GREEN}[+][+][+][+] CONFIGURING NGINX $OPENSSL_VERSION [+][+][+][+]${NC}"
     configuring_nginx $openssldir_v_user $OPENSSL_VERSION
 fi
 
