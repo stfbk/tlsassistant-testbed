@@ -23,6 +23,7 @@ add_php_script () {
 }
 
 creating_alias () {
+    echo -e "${GREEN}[+][+][+][+] CREATING AN ALIAS FOR $1 [+][+][+][+]${NC}"
     echo -e "#!/bin/bash\nsudo /usr/local/nginx-$1/sbin/nginx" > nginx-$1
     chmod 777 nginx-$1
     sudo mv nginx-$1 /usr/bin
@@ -137,11 +138,11 @@ if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
     add_php_script $OPENSSL_VERSION
 fi
 
-echo -e "${GREEN}[+][+][+][+] CREATING AN ALIAS FOR $DEFAULT_OPENSSL_VERSION [+][+][+][+]${NC}"
+#! CREATING AN ALIAS FOR THE NGINX SERVER
+
 creating_alias $DEFAULT_OPENSSL_VERSION
 
 if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
-    echo -e "${GREEN}[+][+][+][+] CREATING AN ALIAS FOR $OPENSSL_VERSION [+][+][+][+]${NC}"
     creating_alias $OPENSSL_VERSION
 fi
 
