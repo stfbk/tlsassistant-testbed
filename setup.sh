@@ -29,6 +29,11 @@ creating_alias () {
     sudo mv nginx-$1 /usr/bin
 }
 
+generate_certificate () {
+    echo -e "${GREEN}[+][+][+][+] GENERATING THE CERTIFICATE FOR NGINX WITH OPENSSL VERSION $1[+][+][+][+]${NC}"
+    sudo openssl req -x509 -nodes -subj "/CN=fbk.eu" -newkey rsa:4096 -keyout /usr/local/nginx-$1/conf/cert.key -out /usr/local/nginx-$1/conf/cert.pem -days 365
+}
+
 OPENSSL_VERSION_LIST=(
     "1.0.1"
     "1.0.1a"
@@ -146,12 +151,12 @@ if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
     creating_alias $OPENSSL_VERSION
 fi
 
-echo -e "${GREEN}[+][+][+][+] GENERATING THE CERTIFICATE [+][+][+][+]${NC}"
-sudo openssl req -x509 -nodes -subj "/CN=fbk.eu" -newkey rsa:4096 -keyout /usr/local/nginx-$DEFAULT_OPENSSL_VERSION/conf/cert.key -out /usr/local/nginx-$DEFAULT_OPENSSL_VERSION/conf/cert.pem -days 365
+#! GENERATING THE CERTIFICATE
+
+generate_certificate $DEFAULT_OPENSSL_VERSION
 
 if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
-    echo -e "${GREEN}[+][+][+][+] GENERATING THE CERTIFICATE [+][+][+][+]${NC}"
-    sudo openssl req -x509 -nodes -subj "/CN=fbk.eu" -newkey rsa:4096 -keyout /usr/local/nginx-$OPENSSL_VERSION/conf/cert.key -out /usr/local/nginx-$OPENSSL_VERSION/conf/cert.pem -days 365
+    generate_certificate $OPENSSL_VERSION
 fi
 
 echo -e "${GREEN}[+][+][+][+] COPY THE SERVER CONFIGURATION [+][+][+][+]${NC}"
