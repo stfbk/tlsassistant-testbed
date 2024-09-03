@@ -87,7 +87,7 @@ else
     done
 fi
 
-openssldir_v_u=$(pwd)A
+openssldir_v_u=$(pwd)
 openssldir_v_user=""
 
 #! DOWNLOADING OPENSSL
