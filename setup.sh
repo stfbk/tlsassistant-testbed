@@ -1,6 +1,8 @@
 #!/bin/bash
 
 GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 download_openssl () {
@@ -186,4 +188,14 @@ if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
     copy_configuration $OPENSSL_VERSION
 fi
 
-echo -e "${GREEN}[+][+][+][+] THE CONFIGURATION IS DONE [+][+][+][+]${NC}"
+#! CHECKING IF EVERYTHING IS OK
+
+if [ -d "/usr/local/nginx-$DEFAULT_OPENSSL_VERSION" ] && [ -d "/usr/local/nginx-$OPENSSL_VERSION" ]; then
+    echo -e "${GREEN}[+][+][+][+] THE CONFIGURATION IS DONE [+][+][+][+]${NC}"
+    elif [ -d "/usr/local/nginx-$DEFAULT_OPENSSL_VERSION "]; then
+    echo -e "${YELLOW}[+][+][+][+] ONLY THE DEFAULT WEBSERVER WAS CONFIGURED [+][+][+][+]${NC}"
+else
+    echo -e "${RED}[+][+][+][+] CONFIGURATION FAILED [+][+][+][+]${NC}"
+fi
+
+
