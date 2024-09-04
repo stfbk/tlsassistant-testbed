@@ -117,13 +117,12 @@ download_openssl $DEFAULT_OPENSSL_VERSION
 
 if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
     for element in "${OPENSSL_VERSION_LIST[@]}"; do
+        if [[ "$element" == "1.0.1h" ]]; then
+            openssldir_v_user=$(pwd)
+            download_openssl $OPENSSL_VERSION
+            break
+        fi
         if [ "$element" == "$OPENSSL_VERSION" ]; then
-            if [[ "$element" == "1.0.1h" ]]; then
-                openssldir_v_user=$(pwd)
-                download_openssl $OPENSSL_VERSION
-                break
-            fi
-            
             openssldir_v_user=$(pwd)
             download_openssl $OPENSSL_VERSION
             
