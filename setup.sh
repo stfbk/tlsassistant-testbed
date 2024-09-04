@@ -10,6 +10,13 @@ download_openssl () {
     rm openssl-$1.tar.gz
 }
 
+download_nginx (){
+    echo -e "${GREEN}[+][+][+][+] DOWNLOADING NGINX VERSION $1[+][+][+][+]${NC}"
+    wget http://nginx.org/download/nginx-$1.tar.gz
+    tar -zxvf nginx-$1.tar.gz
+    rm nginx-$1.tar.gz
+}
+
 configuring_nginx () {
     echo -e "${GREEN}[+][+][+][+] CONFIGURING NGINX WITH OPENSSL VERSION $2 [+][+][+][+]${NC}"
     ./configure --with-http_ssl_module --with-http_spdy_module --with-openssl="$1/openssl-$2" --with-openssl-opt='enable-weak-ssl-ciphers enable-rc4 enable-ssl2' --with-http_gzip_static_module --prefix=/usr/local/nginx-$2 --with-cc-opt="-Wno-error"
@@ -67,6 +74,11 @@ OPENSSL_VERSION_LIST=(
 
 echo "Start setup of the virtual machine..."
 
+#! SETUP
+
+sudo apt-get update
+yes | sudo apt-get install build-essential libpcre3 libpcre3-dev zlib1g zlib1g-dev libssl-dev libgd-dev libxml2 libxml2-dev uuid-dev
+
 #! INSTALLING PHP
 
 echo -e "${GREEN}[+][+][+][+] INSTALLING PHP [+][+][+][+]${NC}"
@@ -121,14 +133,9 @@ if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
     done
 fi
 
-#! DOWNLOADING NGINX (only one version at the time for the moment)
+#! DOWNLOADING NGINX
 
-echo -e "${GREEN}[+][+][+][+] DOWNLOADING NGINX [+][+][+][+]${NC}"
-sudo apt-get update
-yes | sudo apt-get install build-essential libpcre3 libpcre3-dev zlib1g zlib1g-dev libssl-dev libgd-dev libxml2 libxml2-dev uuid-dev
-wget http://nginx.org/download/nginx-1.9.0.tar.gz
-tar -zxvf nginx-1.9.0.tar.gz
-rm nginx-1.9.0.tar.gz
+download_nginx 1.9.0
 cd nginx-1.9.0
 
 #! CONFIGURING NGINX
@@ -136,6 +143,11 @@ cd nginx-1.9.0
 configuring_nginx $openssldir_v_u $DEFAULT_OPENSSL_VERSION
 
 if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
+    if [ "$OPENSSL_VERSION" == "1.1.1" ]; then
+        cd ..
+        download_nginx 1.13.0
+        cd nginx-1.13.0
+    fi
     configuring_nginx $openssldir_v_user $OPENSSL_VERSION
 fi
 
