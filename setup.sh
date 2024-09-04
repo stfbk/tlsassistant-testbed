@@ -70,6 +70,7 @@ OPENSSL_VERSION_LIST=(
     "1.0.1s"
     "1.0.1t"
     "1.0.1u"
+    "1.1.1"
 )
 
 echo "Start setup of the virtual machine..."
