@@ -147,8 +147,8 @@ configuring_nginx $openssldir_v_u $DEFAULT_OPENSSL_VERSION
 if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
     if [ "$OPENSSL_VERSION" == "1.1.1" ]; then
         cd ..
-        download_nginx 1.13.0
-        cd nginx-1.13.0
+        download_nginx 1.15.0
+        cd nginx-1.15.0
     fi
     configuring_nginx $openssldir_v_user $OPENSSL_VERSION
 fi
