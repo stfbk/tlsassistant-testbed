@@ -49,6 +49,11 @@ configuring_apache () {
     sudo systemctl restart apache2
 }
 
+generating_apache_keys () {
+    echo -e "${GREEN}[+][+][+][+] GENERATING APACHE CERTIFICATE [+][+][+][+]${NC}"
+    sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
+}
+
 add_php_script () {
     echo -e "${GREEN}[+][+][+][+] ADDING PHP SCRIPT TO NGINX [+][+][+][+]${NC}"
     sudo cp -f scripts/reflection.php /usr/local/nginx-$1/html
