@@ -54,6 +54,11 @@ generating_apache_keys () {
     sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
 }
 
+copy_apache_configuration () {
+    echo -e "${GREEN}[+][+][+][+] COPYING THE SERVER CONFIGURATION [+][+][+][+]${NC}"
+    sudo cp -f  default-ssl.conf /etc/apache2/sites-available/
+}
+
 add_php_script () {
     echo -e "${GREEN}[+][+][+][+] ADDING PHP SCRIPT TO NGINX [+][+][+][+]${NC}"
     sudo cp -f scripts/reflection.php /usr/local/nginx-$1/html
