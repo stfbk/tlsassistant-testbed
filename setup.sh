@@ -19,6 +19,16 @@ download_nginx (){
     rm nginx-$1.tar.gz
 }
 
+configuring_openssl () {
+    echo -e "${RED}[+][+][+][+] REMOVING OPENSSL FROM YOUR SYSTEM [+][+][+][+]${NC}"
+    sudo apt-get remove openssl #! might need purge, DO NOT use --auto-remove for any reason in the world
+    cd openssl-0.9.8
+    echo -e "${GREEN}[+][+][+][+] CONFIGURING AND INSTALLING OPENSSL VERSION $1 [+][+][+][+]${NC}"
+    ./config no-asm zlib --openssldir=/usr
+    sudo make
+    sudo make install_sw #! here we can install_sw because the config is not done by nginx
+}
+
 configuring_nginx () {
     echo -e "${GREEN}[+][+][+][+] CONFIGURING NGINX WITH OPENSSL VERSION $2 [+][+][+][+]${NC}"
     ./configure --with-http_ssl_module --with-http_spdy_module --with-openssl="$1/openssl-$2" --with-openssl-opt='enable-weak-ssl-ciphers enable-rc4 enable-ssl2' --with-http_gzip_static_module --prefix=/usr/local/nginx-$2 --with-cc-opt="-Wno-error"
@@ -50,6 +60,7 @@ copy_configuration () {
 }
 
 OPENSSL_VERSION_LIST=(
+    "0.9.8" #? 0.9.8 might not need to have the .pod files fixed (?) crazy how bad openssl is
     "1.0.1"
     "1.0.1a"
     "1.0.1b"
