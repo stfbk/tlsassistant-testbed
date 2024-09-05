@@ -36,6 +36,19 @@ configuring_nginx () {
     sudo make install
 }
 
+configuring_apache () {
+    echo -e "${GREEN}[+][+][+][+] INSTALLING APACHE2 [+][+][+][+]${NC}"
+    sudo apt update
+    sudo apt -y install apache2
+    echo -e "${GREEN}[+][+][+][+] CONFIGURING APACHE2 [+][+][+][+]${NC}"
+    sudo a2enmod ssl
+    generating_apache_keys
+    copy_apache_configuration
+    sudo a2ensite default-ssl
+    echo -e "${GREEN}[+][+][+][+] RESTARTING THE APACHE SERVER [+][+][+][+]${NC}"
+    sudo systemctl restart apache2
+}
+
 add_php_script () {
     echo -e "${GREEN}[+][+][+][+] ADDING PHP SCRIPT TO NGINX [+][+][+][+]${NC}"
     sudo cp -f scripts/reflection.php /usr/local/nginx-$1/html
