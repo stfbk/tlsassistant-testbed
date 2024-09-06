@@ -22,7 +22,7 @@ download_nginx (){
 configuring_openssl () {
     echo -e "${RED}[+][+][+][+] REMOVING OPENSSL FROM YOUR SYSTEM [+][+][+][+]${NC}"
     sudo apt-get remove openssl #! might need purge, DO NOT use --auto-remove for any reason in the world
-    cd openssl-0.9.8
+    cd openssl-$1
     echo -e "${GREEN}[+][+][+][+] CONFIGURING AND INSTALLING OPENSSL VERSION $1 [+][+][+][+]${NC}"
     ./config no-asm zlib --openssldir=/usr
     sudo make
@@ -183,6 +183,10 @@ if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
         cd ..
         download_nginx 1.15.0
         cd nginx-1.15.0
+        elif [ "$OPENSSL_VERSION" == "0.9.8" ]; then
+        cd ..
+        configuring_openssl 0.9.8
+        configuring_apache
     fi
     configuring_nginx $openssldir_v_user $OPENSSL_VERSION
 fi
