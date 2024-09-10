@@ -145,22 +145,23 @@ if [ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]; then
         cd ..
         configuring_apache
     fi
-    configuring_nginx $MAINDIR $OPENSSL_VERSION
+    
+    [ "$OPENSSL_VERSION" == "0.9.8" ] || configuring_nginx $MAINDIR $OPENSSL_VERSION
 fi
 
 cd ..
 
 add_php_script $DEFAULT_OPENSSL_VERSION
-[ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]  && [ "$OPENSSL_VERSION" != "0.9.8" ]&& add_php_script $OPENSSL_VERSION
+[ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ] && [ "$OPENSSL_VERSION" != "0.9.8" ] && add_php_script $OPENSSL_VERSION
 
 creating_alias $DEFAULT_OPENSSL_VERSION
-[ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]  && [ "$OPENSSL_VERSION" != "0.9.8" ]&& creating_alias $OPENSSL_VERSION
+[ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ] && [ "$OPENSSL_VERSION" != "0.9.8" ] && creating_alias $OPENSSL_VERSION
 
 generate_certificate $DEFAULT_OPENSSL_VERSION
-[ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]  && [ "$OPENSSL_VERSION" != "0.9.8" ]&& generate_certificate $OPENSSL_VERSION
+[ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ] && [ "$OPENSSL_VERSION" != "0.9.8" ] && generate_certificate $OPENSSL_VERSION
 
 copy_configuration $DEFAULT_OPENSSL_VERSION
-[ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ]  && [ "$OPENSSL_VERSION" != "0.9.8" ]&& copy_configuration $OPENSSL_VERSION
+[ "$OPENSSL_VERSION" != "$DEFAULT_OPENSSL_VERSION" ] && [ "$OPENSSL_VERSION" != "0.9.8" ] && copy_configuration $OPENSSL_VERSION
 
 if [ -d "/usr/local/nginx-$DEFAULT_OPENSSL_VERSION" ] && [ -d "/usr/local/nginx-$OPENSSL_VERSION" ]; then
     echo -e "${GREEN}[+][+][+][+] THE CONFIGURATION IS DONE [+][+][+][+]${NC}"
