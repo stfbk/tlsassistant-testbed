@@ -62,6 +62,16 @@ echo -e "${GREEN}[+][+][+][+] STARTING THE WEBSERVER WITH NGINX WITH OPENSSL VER
 sudo /usr/local/nginx-1.0.1a/sbin/nginx
 cd ..
 
+# full configuration of Apache Webserver with apr-1.6.5, apr-util-1.6.1, httpd 2.4.37 and OpenSSL version 1.0.2-stable
+
+echo -e "${GREEN}[+][+][+][+] INSTALLING DEPENDENCIES FOR APACHE WITH OPENSSL 1.0.2 [+][+][+][+]${NC}"
+sudo apt install -y aha html2text libxml2-utils pandoc dos2unix python-pip
+pip install --pre tlslite-ng
+sudo apt install -y libexpat1-dev
+sudo apt install -y python-pip
+pip install --pre tlslite-ng
+sudo apt install -y pandoc geany dos2unix
+
 # full configuration of OpenSSL S_Server with OpenSSL version 1.0.2-patched by DamnVulnerableOpenSSL (https://github.com/tls-attacker/DamnVulnerableOpenSSL.git)
 
 echo -e "${GREEN}[+][+][+][+] CLONING DamnVulnerableOpenSSL FROM GitHub [+][+][+][+]${NC}"
