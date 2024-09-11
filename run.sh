@@ -63,7 +63,7 @@ sudo /usr/local/nginx-1.0.1a/sbin/nginx
 cd ..
 
 # full configuration of Apache Webserver with apr-1.6.5, apr-util-1.6.1, httpd 2.4.37 and OpenSSL version 1.0.2-stable
-
+mkdir apache && cd apache
 echo -e "${GREEN}[+][+][+][+] INSTALLING DEPENDENCIES FOR APACHE WITH OPENSSL 1.0.2 [+][+][+][+]${NC}"
 sudo apt install -y aha html2text libxml2-utils pandoc dos2unix python-pip
 pip install --pre tlslite-ng
@@ -78,7 +78,7 @@ cd openssl
 ./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl enable-weak-ssl-ciphers enable-deprecated enable-rc4 enable-ssl2 enable-ssl3 enable-ssl3-method enable-comp enable-zlib-dynamic -Wl,-rpath=/usr/local/ssl/lib
 make depend
 make 
-sudo make install
+sudo make install #sw
 cd ..
 
 echo -e "${GREEN}[+][+][+][+] DOWNLOADING APACHE HTTPD, APR & APR-UTIL [+][+][+][+]${NC}"
@@ -99,8 +99,18 @@ mv apr-util-1.6.1 httpd-2.4.37/srclib/apr-util
 cd httpd-2.4.37
 ./configure --with-included-apr --enable-ssl --with-ssl=/usr/local/ssl --enable-deflate --enable-mods-static=ssl --enable-mods-shared=deflate
 make
-sudo make install
+sudo make install #sw
+#fai partire... porta 443 (9007)
 cd ..
+
+echo -e "${GREEN}[+][+][+][+] GENERATING THE CERTIFICATE FOR APACHE WITH OPENSSL VERSION 1.0.2 [+][+][+][+]${NC}"
+mkdir certificates && cd certificates
+sudo openssl genrsa -out dummy.com.key 4096
+sudo openssl req -new -key dummy.com.key -out dummy.com.csr -sha512 -subj '/C=IT/ST=Trento/L=Trento/O=FBK/OU=S&T/CN=www.dummy.com'
+sudo openssl x509 -req -days 365 -in dummy.com.csr -signkey dummy.com.key -out dummy.com.crt -sha512
+cd ..
+
+
 
 # full configuration of OpenSSL S_Server with OpenSSL version 1.0.2-patched by DamnVulnerableOpenSSL (https://github.com/tls-attacker/DamnVulnerableOpenSSL.git)
 
