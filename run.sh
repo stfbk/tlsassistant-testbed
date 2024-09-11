@@ -110,7 +110,13 @@ sudo openssl req -new -key dummy.com.key -out dummy.com.csr -sha512 -subj '/C=IT
 sudo openssl x509 -req -days 365 -in dummy.com.csr -signkey dummy.com.key -out dummy.com.crt -sha512
 cd ..
 
-
+echo -e "${GREEN}[+][+][+][+] COPYING THE SERVER CONFIGURATION [+][+][+][+]${NC}"
+sudo cp ../configs/httpd-ssl-apache.conf /usr/local/apache2/conf/extra/httpd-ssl.conf
+sudo cp ../configs/httpd-apache.conf /usr/local/apache2/conf/httpd.conf
+sudo rm /usr/local/apache2/htdocs/index.html 2>/dev/null
+sudo touch /usr/local/apache2/htdocs/index.html
+echo "<html><head><title>Experiment</title></head><hr><h1>Experimental dummy page</h1><p>Dummy text, from dummy developers, for dummy code. ;) </p><!-- DummyDevs ;) --></body></html>" | sudo tee -a /usr/local/apache2/htdocs/index.html > /dev/null
+cd ..
 
 # full configuration of OpenSSL S_Server with OpenSSL version 1.0.2-patched by DamnVulnerableOpenSSL (https://github.com/tls-attacker/DamnVulnerableOpenSSL.git)
 
