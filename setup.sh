@@ -6,7 +6,7 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 MAINDIR=$(pwd)
-OUTPUT="/dev/null"
+OUTPUT="dump.log"
 DEFAULT_OPENSSL_VERSION="1.0.1u"
 OPENSSL_VERSION_LIST=(
     "0.9.8"
