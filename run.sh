@@ -72,6 +72,16 @@ sudo apt install -y python-pip
 pip install --pre tlslite-ng
 sudo apt install -y pandoc geany dos2unix
 
+echo -e "${GREEN}[+][+][+][+] DOWNLOADING OPENSSL VERSION 1.0.2 [+][+][+][+]${NC}"
+git clone -b OpenSSL_1_0_2-stable https://github.com/openssl/openssl.git
+cd openssl
+./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl enable-weak-ssl-ciphers enable-deprecated enable-rc4 enable-ssl2 enable-ssl3 enable-ssl3-method enable-comp enable-zlib-dynamic -Wl,-rpath=/usr/local/ssl/lib
+make depend
+make 
+sudo make install
+cd ..
+
+
 # full configuration of OpenSSL S_Server with OpenSSL version 1.0.2-patched by DamnVulnerableOpenSSL (https://github.com/tls-attacker/DamnVulnerableOpenSSL.git)
 
 echo -e "${GREEN}[+][+][+][+] CLONING DamnVulnerableOpenSSL FROM GitHub [+][+][+][+]${NC}"
