@@ -81,6 +81,26 @@ make
 sudo make install
 cd ..
 
+echo -e "${GREEN}[+][+][+][+] DOWNLOADING APACHE HTTPD, APR & APR-UTIL [+][+][+][+]${NC}"
+wget http://mirror.nohup.it/apache//httpd/httpd-2.4.37.tar.bz2
+tar xvjf httpd-2.4.37.tar.bz2
+rm httpd-2.4.37.tar.bz2
+
+wget http://it.apache.contactlab.it//apr/apr-1.6.5.tar.gz
+tar xvf apr-1.6.5.tar.gz
+rm apr-1.6.5.tar.gz
+mv apr-1.6.5 httpd-2.4.37/srclib/apr
+
+wget http://it.apache.contactlab.it//apr/apr-util-1.6.1.tar.gz
+tar xvf apr-util-1.6.1.tar.gz
+rm apr-util-1.6.1.tar.gz
+mv apr-util-1.6.1 httpd-2.4.37/srclib/apr-util
+
+cd httpd-2.4.37
+./configure --with-included-apr --enable-ssl --with-ssl=/usr/local/ssl --enable-deflate --enable-mods-static=ssl --enable-mods-shared=deflate
+make
+sudo make install
+cd ..
 
 # full configuration of OpenSSL S_Server with OpenSSL version 1.0.2-patched by DamnVulnerableOpenSSL (https://github.com/tls-attacker/DamnVulnerableOpenSSL.git)
 
