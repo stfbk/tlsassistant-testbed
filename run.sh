@@ -100,7 +100,6 @@ cd httpd-2.4.37
 ./configure --with-included-apr --enable-ssl --with-ssl=/usr/local/ssl --enable-deflate --enable-mods-static=ssl --enable-mods-shared=deflate
 make
 sudo make install #sw
-#fai partire... porta 443 (9007)
 cd ..
 
 echo -e "${GREEN}[+][+][+][+] GENERATING THE CERTIFICATE FOR APACHE WITH OPENSSL VERSION 1.0.2 [+][+][+][+]${NC}"
@@ -109,6 +108,8 @@ sudo openssl genrsa -out dummy.com.key 4096
 sudo openssl req -new -key dummy.com.key -out dummy.com.csr -sha512 -subj '/C=IT/ST=Trento/L=Trento/O=FBK/OU=S&T/CN=www.dummy.com'
 sudo openssl x509 -req -days 365 -in dummy.com.csr -signkey dummy.com.key -out dummy.com.crt -sha512
 cd ..
+cp certificates  /usr/local/apache2/conf/extra/
+
 
 echo -e "${GREEN}[+][+][+][+] COPYING THE SERVER CONFIGURATION [+][+][+][+]${NC}"
 sudo cp ../configs/httpd-ssl-apache.conf /usr/local/apache2/conf/extra/httpd-ssl.conf
