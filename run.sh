@@ -129,4 +129,4 @@ echo -e "${GREEN}[+][+][+][+] BUILDING DOCKER FOR DamnVulnerableOpenSSL [+][+][+
 sudo docker build -t damnvulnerableopenssl .
 
 echo -e "${GREEN}[+][+][+][+] RUNNING DamnVulnerableOpenSSL OPENSSL SERVER [+][+][+][+]${NC}"
-sudo docker run -p 9006:9006 damnvulnerableopenssl
+sudo docker run -p 9006:9006 damnvulnerableopenssl &
