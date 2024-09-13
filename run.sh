@@ -63,9 +63,44 @@ cp ../configs/config-1.0.1a.conf /usr/local/nginx-1.0.1a/conf/nginx.conf
 
 echo -e "${GREEN}[+][+][+][+] STARTING THE WEBSERVER WITH NGINX WITH OPENSSL VERSION 1.0.1a [+][+][+][+]${NC}"
 /usr/local/nginx-1.0.1a/sbin/nginx
+
+# full configuration of OpenSSL S_Server with OpenSSL version 1.0.2-patched by DamnVulnerableOpenSSL (https://github.com/tls-attacker/DamnVulnerableOpenSSL.git)
+
+echo -e "${GREEN}[+][+][+][+] CLONING DamnVulnerableOpenSSL FROM GitHub [+][+][+][+]${NC}"
+git clone https://github.com/tls-attacker/DamnVulnerableOpenSSL.git
+cd DamnVulnerableOpenSSL
+
+echo -e "${GREEN}[+][+][+][+] FIXING INSTALLATION FILE FOR PATCH [+][+][+][+]${NC}"
+sed -i '/.\/config/d' ./install.sh
+sed -i '/make -j4/d' ./install.sh
+sed -i '/cd openssl-1.0.2l/d' ./install.sh
+
+./install.sh
 cd ..
 
+echo -e "${GREEN}[+][+][+][+] CONFIGURING NGINX WITH OPENSSL VERSION 1.0.2l patched [+][+][+][+]${NC}"
+./configure --with-http_ssl_module --with-openssl="DamnVulnerableOpenSSL/openssl-1.0.2l" --prefix=/usr/local/nginx-1.0.2l --with-cc-opt="-Wno-error"
+make
+make install
+
+echo -e "${GREEN}[+][+][+][+] COPYING THE SERVER CONFIGURATION [+][+][+][+]${NC}"
+cp ../configs/config-1.0.2l.conf /usr/local/nginx-1.0.2l/conf/nginx.conf
+
+echo -e "${GREEN}[+][+][+][+] GENERATING THE CERTIFICATE FOR NGINX WITH OPENSSL VERSION 1.0.2l [+][+][+][+]${NC}"
+openssl req -x509 -nodes -subj "/CN=fbk.eu" -newkey rsa:4096 -keyout /usr/local/nginx-1.0.2l/conf/cert.key -out /usr/local/nginx-1.0.2l/conf/cert.pem -days 365
+
+echo -e "${GREEN}[+][+][+][+] STARTING THE WEBSERVER WITH NGINX WITH OPENSSL VERSION 1.0.2l [+][+][+][+]${NC}"
+/usr/local/nginx-1.0.2l/sbin/nginx
+cd ..
+
+#echo -e "${GREEN}[+][+][+][+] BUILDING DOCKER FOR DamnVulnerableOpenSSL [+][+][+][+]${NC}"
+#docker build -t damnvulnerableopenssl .
+
+#echo -e "${GREEN}[+][+][+][+] RUNNING DamnVulnerableOpenSSL OPENSSL SERVER [+][+][+][+]${NC}"
+#docker run -p 9006:9006 damnvulnerableopenssl &
+
 # full configuration of Apache Webserver with apr-1.6.5, apr-util-1.6.1, httpd 2.4.37 and OpenSSL version 1.0.2-stable
+
 mkdir apache && cd apache
 echo -e "${GREEN}[+][+][+][+] DOWNLOADING OPENSSL VERSION 1.0.2 [+][+][+][+]${NC}"
 git clone -b OpenSSL_1_0_2-stable https://github.com/openssl/openssl.git
@@ -100,7 +135,6 @@ openssl x509 -req -days 365 -in dummy.com.csr -signkey dummy.com.key -out dummy.
 cd ..
 cp -r certificates/ /usr/local/apache2/
 
-
 echo -e "${GREEN}[+][+][+][+] COPYING THE SERVER CONFIGURATION [+][+][+][+]${NC}"
 cp ../configs/httpd-ssl-apache.conf /usr/local/apache2/conf/extra/httpd-ssl.conf
 cp ../configs/httpd-apache.conf /usr/local/apache2/conf/httpd.conf
@@ -109,16 +143,8 @@ touch /usr/local/apache2/htdocs/index.html
 echo "<html><head><title>Experiment</title></head><hr><h1>Experimental dummy page</h1><p>Dummy text, from dummy developers, for dummy code. ;) </p><!-- DummyDevs ;) --></body></html>" | tee -a /usr/local/apache2/htdocs/index.html > /dev/null
 cd ..
 
+echo -e "${GREEN}[+][+][+][+] STARTING THE APACHE WEBSERVER [+][+][+][+]${NC}"
 /usr/local/apache2/bin/apachectl -k start
 
-# full configuration of OpenSSL S_Server with OpenSSL version 1.0.2-patched by DamnVulnerableOpenSSL (https://github.com/tls-attacker/DamnVulnerableOpenSSL.git)
-
-echo -e "${GREEN}[+][+][+][+] CLONING DamnVulnerableOpenSSL FROM GitHub [+][+][+][+]${NC}"
-git clone https://github.com/tls-attacker/DamnVulnerableOpenSSL.git
-cd DamnVulnerableOpenSSL
-
-echo -e "${GREEN}[+][+][+][+] BUILDING DOCKER FOR DamnVulnerableOpenSSL [+][+][+][+]${NC}"
-docker build -t damnvulnerableopenssl .
-
-echo -e "${GREEN}[+][+][+][+] RUNNING DamnVulnerableOpenSSL OPENSSL SERVER [+][+][+][+]${NC}"
-docker run -p 9006:9006 damnvulnerableopenssl &
+# gn
+sleep infinity
