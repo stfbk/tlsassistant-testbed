@@ -1,6 +1,6 @@
-# tlsasisstant testbed
+# TLSAssistant Testbed
 
-The tlsasisstant testbed is an open source code for automatically configuring various vulnerable webservers for the purpose of testing TLSAssistant analysis modules..
+The TLSAssistant Testbed is an open source code for automatically configuring various vulnerable webservers for the purpose of testing TLSAssistant analysis modules..
 
 ## Installation
 
