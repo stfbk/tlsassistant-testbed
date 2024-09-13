@@ -8,8 +8,8 @@ NC='\033[0m' # No Color
 echo -e "${GREEN}[+][+][+][+] Start setup of the virtual machine... [+][+][+][+]${NC}"
 
 sudo apt-get update
-sudo apt-get -y install build-essential libpcre3 libpcre3-dev zlib1g zlib1g-dev libssl-dev libgd-dev libxml2 libxml2-dev uuid-dev git docker.io 
-sudo apt install -y aha html2text libxml2-utils pandoc dos2unix python-pip libexpat1-dev geany 
+sudo apt-get -y install build-essential libpcre3 libpcre3-dev zlib1g zlib1g-dev libssl-dev libgd-dev libxml2 libxml2-dev uuid-dev git docker.io
+sudo apt install -y aha html2text libxml2-utils pandoc dos2unix python-pip libexpat1-dev geany
 sudo pip install --pre tlslite-ng
 
 
@@ -72,8 +72,8 @@ git clone -b OpenSSL_1_0_2-stable https://github.com/openssl/openssl.git
 cd openssl
 ./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl enable-weak-ssl-ciphers enable-deprecated enable-rc4 enable-ssl2 enable-ssl3 enable-ssl3-method enable-comp enable-zlib-dynamic -Wl,-rpath=/usr/local/ssl/lib
 make depend
-make 
-sudo make install 
+make
+sudo make install_sw
 cd ..
 
 echo -e "${GREEN}[+][+][+][+] DOWNLOADING APACHE HTTPD, APR & APR-UTIL [+][+][+][+]${NC}"
@@ -97,7 +97,7 @@ mkdir certificates && cd certificates
 sudo openssl genrsa -out dummy.com.key 4096
 sudo openssl req -new -key dummy.com.key -out dummy.com.csr -sha512 -subj '/C=IT/ST=Trento/L=Trento/O=FBK/OU=S&T/CN=www.dummy.com'
 sudo openssl x509 -req -days 365 -in dummy.com.csr -signkey dummy.com.key -out dummy.com.crt -sha512
-cd .. 
+cd ..
 cp -r certificates/ /usr/local/apache2/
 
 
@@ -122,7 +122,3 @@ sudo docker build -t damnvulnerableopenssl .
 
 echo -e "${GREEN}[+][+][+][+] RUNNING DamnVulnerableOpenSSL OPENSSL SERVER [+][+][+][+]${NC}"
 sudo docker run -p 9006:9006 damnvulnerableopenssl &
-
-
-AH00526: Syntax error on line 144 of /usr/local/apache2/conf/extra/httpd-ssl.conf:
-SSLCertificateFile: file '/usr/local/apache2/certificates/dummy.com.crt' does not exist
