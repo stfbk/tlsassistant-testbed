@@ -103,7 +103,7 @@ cd ..
 
 mkdir apache && cd apache
 echo -e "${GREEN}[+][+][+][+] DOWNLOADING OPENSSL VERSION 1.0.2 [+][+][+][+]${NC}"
-git clone -b OpenSSL_1_0_2-stable https://github.com/openssl/openssl.git
+git clone --single-branch -b OpenSSL_1_0_2-stable https://github.com/openssl/openssl.git
 cd openssl
 ./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl enable-weak-ssl-ciphers enable-deprecated enable-rc4 enable-ssl2 enable-ssl3 enable-ssl3-method enable-comp enable-zlib-dynamic -Wl,-rpath=/usr/local/ssl/lib
 make depend
