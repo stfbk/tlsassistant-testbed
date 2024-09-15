@@ -1,6 +1,6 @@
 # TLSAssistant Testbed
 
-The TLSAssistant Testbed is an open source code for automatically configuring various vulnerable webservers for the purpose of testing TLSAssistant analysis modules..
+The TLSAssistant Testbed is an open source code for automatically configuring various vulnerable webservers for the purpose of testing TLSAssistant analysis modules.
 
 ## Installation
 
@@ -32,6 +32,30 @@ chmod +x run.sh
 3. Run the run.sh script:
 ```bash
 sudo ./run.sh
+```
+</details>
+
+### Docker
+
+Recommended for non-Ubuntu users:
+
+Since it does use APT and install dependencies, we can use the Dockerfile to build the image and contain the installation process.
+
+<details>
+<summary>Docker build and run tutorial</summary>
+Clone the repository:
+
+```bash
+  git clone https://github.com/stfbk/tlsassistant-testbed && cd tlsassistant-testbed
+```
+Build the docker image:
+```bash
+  docker build -t tlsassistant-testbed .
+```
+Run the docker image mapping all of the ports:
+
+```bash
+  docker run -p 9000:9000 -p 9001:9001 -p 9002:9002 -p 9003:9003 -p 9004:9004 -p 9005:9005 -p 9006:9006 -p 9007:9007 -t tlsassistant-testbed
 ```
 </details>
 
