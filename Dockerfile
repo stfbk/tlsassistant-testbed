@@ -32,8 +32,15 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /tlsassistant-testbed
 
-COPY . /tlsassistant-testbed
+COPY ./configs /tlsassistant-testbed/configs
+COPY ./dependencies /tlsassistant-testbed/dependencies
+COPY ./doc /tlsassistant-testbed/doc
+COPY ./prepare.sh /tlsassistant-testbed/prepare.sh
+COPY ./run.sh /tlsassistant-testbed/run.sh
 
+RUN chmod +x /tlsassistant-testbed/prepare.sh
 RUN chmod +x /tlsassistant-testbed/run.sh
+
+RUN /tlsassistant-testbed/prepare.sh
 
 CMD ["bash", "/tlsassistant-testbed/run.sh"]
