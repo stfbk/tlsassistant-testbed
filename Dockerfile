@@ -1,9 +1,11 @@
 #TO BUILD: docker build -t tlsassistant-testbed .
-#TO RUN: docker run -p 9000:9000 -p 9001:9001 -p 9002:9002 -p 9003:9003 -p 9004:9004 -p 9005:9005 -p 9006:9006 -p 9007:9007 -t tlsassistant-testbed
+#TO RUN: docker run -p 9000-90010:9000-90010 -t tlsassistant-testbed
 
 FROM ubuntu:18.04
 
 # LABEL maintainer="Emiliano Rizzonelli <920a9sk42f76c765@proton.me> and Daniel Franchini <danielfranchini@virgilio.com>"
+
+ENV RUNNING_IN_DOCKER=true
 
 RUN apt-get update && apt-get install -y \
     wget \

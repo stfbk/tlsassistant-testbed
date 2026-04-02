@@ -14,6 +14,9 @@ echo -e "${GREEN}[+][+][+][+] STARTING THE WEBSERVER WITH NGINX WITH OPENSSL VER
 echo -e "${GREEN}[+][+][+][+] STARTING THE WEBSERVER WITH NGINX WITH OPENSSL VERSION 1.0.2l [+][+][+][+]${NC}"
 /usr/local/nginx-1.0.2l/sbin/nginx
 
+echo -e "${GREEN}[+][+][+][+] STARTING THE WEBSERVER WITH NGINX WITH OPENSSL VERSION 3.0.12 [+][+][+][+]${NC}"
+/usr/local/nginx-3.0.12/sbin/nginx
+
 echo -e "${GREEN}[+][+][+][+] STARTING THE APACHE WEBSERVER [+][+][+][+]${NC}"
 /usr/local/apache2/bin/apachectl start
 
