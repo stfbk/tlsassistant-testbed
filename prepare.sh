@@ -91,6 +91,27 @@ cd ..
 #echo -e "${GREEN}[+][+][+][+] RUNNING DamnVulnerableOpenSSL OPENSSL SERVER [+][+][+][+]${NC}"
 #docker run -p 9006:9006 damnvulnerableopenssl &
 
+echo -e "${GREEN}[+][+][+][+] DOWNLOADING NGINX VERSION 1.24.0 and OpenSSL 3.0.12 [+][+][+][+]${NC}"
+wget http://nginx.org/download/nginx-1.24.0.tar.gz
+tar -zxvf nginx-1.24.0.tar.gz
+rm nginx-1.24.0.tar.gz
+cd nginx-1.24.0
+
+echo -e "${GREEN}[+][+][+][+] DOWNLOADING OPENSSL VERSION 3.0.12 [+][+][+][+]${NC}"
+wget --no-check-certificate https://www.openssl.org/source/openssl-3.0.12.tar.gz
+tar -zxf openssl-3.0.12.tar.gz
+rm openssl-3.0.12.tar.gz
+
+./configure --with-http_ssl_module --with-openssl="openssl-3.0.12" --with-openssl-opt='enable-weak-ssl-ciphers enable-rc4 enable-ssl2' --with-http_gzip_static_module --prefix=/usr/local/nginx-3.0.12 --with-cc-opt="-Wno-error"
+make
+make install
+
+cp ../configs/acn.conf /usr/local/nginx-3.0.12/conf/nginx.conf
+openssl ecparam -name prime256v1 -genkey -noout | tee certificate_ec.key | openssl req -x509 -days 365 -sha256 -new -key /dev/stdin -subj "/C=US/ST=State/L=City/O=Org/OU=Unit/CN=example.com" -out certificate_ec.crt
+mv certificate_ec.crt /usr/local/nginx-3.0.12/conf/
+mv certificate_ec.key /usr/local/nginx-3.0.12/conf/
+
+
 # full configuration of Apache Webserver with apr-1.6.5, apr-util-1.6.1, httpd 2.4.37 and OpenSSL version 1.0.2-stable
 
 mkdir apache && cd apache
