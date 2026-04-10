@@ -105,14 +105,18 @@ Run the docker image mapping all of the ports:
 - port 9005 == Heartbleed, CCS, FREAK, LOGJAM, RC4   
 - port 9006 == ROBOT
 - port 9007 == CRIME, BREACH, LUCKY13
+- port 9008 == WIP
+- port 9009 == configuration compliant with ACN guidelines recommended profile
+- port 9010 == configuration compliant with ACN guidelines compatibility profile
 
 </details>
 
 <details>
 <summary> Webservers </summary>
 
-- Nginx 1.9.0 with openssl 1.0.1u
-- Nginx 1.9.0 with openssl 1.0.1a with patched doc files
+- nginx 1.9.0 with openssl 1.0.1u
+- nginx 1.9.0 with openssl 1.0.1a with patched doc files
+- nginx 1.24 with openssl 3.0.12
 - DamnVulnerableOpenSSL Docker 
 - Apache httpd 2.4.37 patched with apr-1.6.5, apr-util-1.6.1 and using openssl 1.0.2-stable
 
@@ -121,7 +125,7 @@ Run the docker image mapping all of the ports:
 ## License
 
 ```
-Copyright 2024, Fondazione Bruno Kessler
+Copyright 2026, Fondazione Bruno Kessler
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
