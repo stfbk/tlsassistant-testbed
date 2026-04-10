@@ -1,5 +1,5 @@
 #TO BUILD: docker build -t tlsassistant-testbed .
-#TO RUN: docker run -p 9000-90010:9000-90010 -t tlsassistant-testbed
+#TO RUN: docker run -p 9000-9010:9000-9010 -t tlsassistant-testbed
 
 FROM ubuntu:18.04
 
