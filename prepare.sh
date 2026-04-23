@@ -111,6 +111,7 @@ openssl ecparam -name prime256v1 -genkey -noout | tee certificate_ec.key | opens
 mv certificate_ec.crt /usr/local/nginx-3.0.12/conf/
 mv certificate_ec.key /usr/local/nginx-3.0.12/conf/
 
+cd ..
 
 # full configuration of Apache Webserver with apr-1.6.5, apr-util-1.6.1, httpd 2.4.37 and OpenSSL version 1.0.2-stable
 
